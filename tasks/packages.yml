@@ -1,11 +1,23 @@
-- name: install ntp
+- name: yum | install ntp
   yum:
     name: ntp
     state: present
+  tags:
+    - ntp_yum-install_ntp
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
-- name: install ntp
+- name: apt | update cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+  tags:
+    - npt_apt-update-cache
+  when: ansible_distribution == 'Ubuntu'
+
+- name: apt | install ntp
   apt:
     name: ntp
     state: present
+  tags:
+    - npt_apt-install-package
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
