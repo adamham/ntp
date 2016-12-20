@@ -1,0 +1,61 @@
+# Blockified as the service is called ntpd on RHEL/CentOS and ntp on Debian/Ubuntu. Groan.
+
+- block:
+    - name: write ntp configuration
+      template:
+        src: ntp.conf.j2
+        dest: /etc/ntp.conf
+        mode: 0644
+        force: yes
+      notify:
+        - restart ntp
+      tags:
+        - ntp_write-configuration
+      failed_when: ntp_servers|length == 0
+
+    - name: Set the timezone
+      file:
+        src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+        dest: /etc/localtime
+        state: link
+        force: yes
+      notify:
+        - restart ntp
+      tags:
+        - ntp_set-timezone
+
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+- block:
+    - name: write ntp configuration
+      template:
+        src: ntp.conf.j2
+        dest: /etc/ntp.conf
+        mode: 0644
+        force: yes
+      notify:
+        - restart ntpd
+      tags:
+        - ntp_write-configuration
+      failed_when: ntp_servers|length == 0
+
+    - name: Set the timezone
+      file:
+        src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+        dest: /etc/localtime
+        state: link
+        force: yes
+      notify:
+        - restart ntpd
+      tags:
+        - ntp_set-timezone
+
+    - name: enable and start ntp service
+      service:
+        name: ntpd
+        enabled: yes
+        state: started
+      tags:
+        - ntp_service-setup
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

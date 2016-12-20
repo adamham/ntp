@@ -1,0 +1,23 @@
+driftfile {{ntp_driftfile}}
+
+{% if ntp_log_stats %}
+statsdir {{ntp_statsdir}}
+{% endif %}
+
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+
+# NTP servers
+{% for ntp_server in ntp_servers %}
+server {{ntp_server}}
+{% endfor %}
+
+# Use CSR Ltd Stratum One server as fallback.
+server chronos.csr.net
+
+# NTP restricts
+{% for restrict in ntp_restricts %}
+{{restrict}}
+{% endfor %}

@@ -1,0 +1,21 @@
+---
+ntp_servers:
+  - 0.uk.pool.ntp.org iburst
+  - 1.uk.pool.ntp.org iburst
+  - 2.uk.pool.ntp.org iburst
+  - 3.uk.pool.ntp.org iburst
+
+ntp_restricts:
+  - "restrict 0.pool.ntp.org nomodify notrap noquery"
+  - "restrict 1.pool.ntp.org nomodify notrap noquery"
+  - "restrict 2.pool.ntp.org nomodify notrap noquery"
+  - "restrict 3.pool.ntp.org nomodify notrap noquery"
+  - "restrict default kod notrap nomodify nopeer noquery"
+  - "restrict 127.0.0.1 nomodify"
+  - "restrict -6 default kod notrap nomodify nopeer noquery"
+  - "restrict -6 ::1 nomodify"
+
+ntp_timezone: "UTC"
+ntp_driftfile: "/var/lib/ntp/ntp.drift"
+ntp_log_stats: no
+ntp_statsdir: "/var/log/ntpstats/"

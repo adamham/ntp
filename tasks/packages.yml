@@ -1,0 +1,11 @@
+- name: install ntp
+  yum:
+    name: ntp
+    state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: install ntp
+  apt:
+    name: ntp
+    state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
